@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: MyString
+  bet_amount: 9.99
+  creator_id: 1
+  opponent_id: 1
+  winner_id: 1
+  player1_board: 
+  player2_board: 
+
+two:
+  status: MyString
+  bet_amount: 9.99
+  creator_id: 1
+  opponent_id: 1
+  winner_id: 1
+  player1_board: 
+  player2_board: 
