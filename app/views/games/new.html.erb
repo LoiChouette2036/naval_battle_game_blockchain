@@ -1,0 +1,10 @@
+<h1>Create a New game</h1>
+<%= form_with model: @game, local: true do |f| %>
+  <div>
+    <%= f.label :bet_amount, "Bet Amount" %>
+    <%= f.number_field :bet_amount %>
+  </div>
+  <div>
+    <%= f.submit "Create Game" %>
+  </div>
+<% end %>

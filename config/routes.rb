@@ -8,4 +8,12 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
+  resources :games, only: [:index, :show, :new, :create] do
+    member do
+      post :place_ship  # Endpoint for placing ships
+      post :attack # Endpoint for attacking
+      post :join # POST /games/:id/join
+    end
+  end
+  
 end

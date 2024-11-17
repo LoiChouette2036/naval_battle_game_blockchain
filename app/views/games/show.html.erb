@@ -1,0 +1,21 @@
+<h1>Game Details</h1>
+<p>Creator: <%= @game.creator.username %></p>
+<p>Opponent: <%= @game.opponent&.username || "Waiting for an opponent" %></p>
+<p>Status: <%= @game.status %></p>
+<p>Current Player: <%= @game.current_player&.username || "Waiting for players to join" %></p>
+
+
+<% if @game.opponent.nil? && @game.creator != current_user %>
+  <!-- Show Join Game button -->
+  <%= button_to "Join Game", join_game_path(@game), method: :post %>
+<% elsif @game.status == "in_progress" %>
+  <!-- Show gameplay buttons -->
+  <%= button_to "Place Ship", place_ship_game_path(@game), method: :post, params: { x: 0, y: 0, direction: "horizontal", size: 3 } %>
+  <%= button_to "Attack", attack_game_path(@game), method: :post, params: { x: 1, y: 1 } %>
+<% end %>
+
+<h2>Your Board</h2>
+<pre><%= current_user == @game.creator ? @game.player1_board : @game.player2_board %></pre>
+
+<h2>Your Guess Board</h2>
+<pre><%= current_user == @game.creator ? @game.player1_guess_board : @game.player2_guess_board %></pre>

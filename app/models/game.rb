@@ -16,10 +16,17 @@ class Game < ApplicationRecord
     self.status = "in_progress"
     self.creator = creator
     self.opponent = opponent
-    self.current_player_id = creator.id # Set Player 1 as the starting player
-    unless self.save
-      raise "Game initialization failed: #{self.errors.full_messages.join(', ')}"
-    end
+    self.current_player_id = creator.id if opponent.present? # Set the starting player only when opponent is present
+    self.save!
+  end
+
+  def join_game(opponent)
+    raise "Game already has two players" if self.opponent.present?
+  
+    self.opponent = opponent
+    self.status = "in_progress" # Change status to in progress when the second player joins
+    self.current_player_id ||= creator.id # Set the starting player to the creator
+    self.save!
   end
 
   # Place a ship on the player's board
@@ -71,7 +78,7 @@ class Game < ApplicationRecord
 
   # Get the current player
   def current_player
-    User.find_by(id: current_player_id) || raise("No current player set for the game")
+    User.find_by(id: current_player_id) 
   end
 
   # Check if there's a winner
