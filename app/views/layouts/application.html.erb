@@ -11,6 +11,20 @@
   </head>
 
   <body>
+    <!-- Flash Messages -->
+    <!--flash.each: Loops through all the flash messages (e.g., :notice, :alert) and displays them. -->
+    <% flash.each do |key, message| %>
+      <div class="flash <%= key %>">
+        <%= message %>
+      </div>
+    <% end %>
+    <% if user_signed_in? %>
+      <p>Welcome, <%= current_user.username %>!</p>
+      <%= button_to "Sign_out", destroy_user_session_path, :method => 'delete', data:{turbo: "false"} %>
+    <% else %>
+      <%= link_to "Sign Up", new_user_registration_path %> |
+      <%= link_to "Log In", new_user_session_path %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
