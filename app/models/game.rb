@@ -8,16 +8,29 @@ class Game < ApplicationRecord
   validates :bet_amount, numericality: { greater_than_or_equal_to: 0 }
 
   # Initialize the game with boards and set the starting player
-  def initialize_game(creator, opponent)
+  def initialize_game(creator, opponent, bet_amount = 0)
+    puts "Initializing game with bet amount: #{bet_amount.inspect}" # Debug output
+
+    # Assign bet amount and log it
+    self.bet_amount = bet_amount.to_d
+    puts "Assigned bet amount: #{self.bet_amount.inspect}" # Confirm assignment
+
+    # Initialize boards
     self.player1_board = Array.new(10) { Array.new(10, '-') }
     self.player2_board = Array.new(10) { Array.new(10, '-') }
     self.player1_guess_board = Array.new(10) { Array.new(10, '-') }
     self.player2_guess_board = Array.new(10) { Array.new(10, '-') }
+
+    # Set game status and players
     self.status = "in_progress"
     self.creator = creator
     self.opponent = opponent
     self.current_player_id = creator.id if opponent.present? # Set the starting player only when opponent is present
+    puts "Bet Amount after assignment: #{self.bet_amount.inspect}"
+
+    # Save and debug
     self.save!
+    puts "Game saved successfully: #{self.inspect}"
   end
 
   def join_game(opponent)

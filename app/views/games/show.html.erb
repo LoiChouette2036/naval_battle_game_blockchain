@@ -15,7 +15,34 @@
 <% end %>
 
 <h2>Your Board</h2>
-<pre><%= current_user == @game.creator ? @game.player1_board : @game.player2_board %></pre>
+<table border="1">
+  <% current_board = current_user == @game.creator ? @game.player1_board : @game.player2_board %>
+  <% if current_board.present? %>
+    <% current_board.each do |row| %>
+      <tr>
+        <% row.each do |cell| %>
+          <td><%= cell %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  <% else %>
+    <p>No board available.</p>
+  <% end %>
+</table>
 
 <h2>Your Guess Board</h2>
-<pre><%= current_user == @game.creator ? @game.player1_guess_board : @game.player2_guess_board %></pre>
+<table border="1">
+  <% guess_board = current_user == @game.creator ? @game.player1_guess_board : @game.player2_guess_board %>
+  <% if guess_board.present? %>
+    <% guess_board.each do |row| %>
+      <tr>
+        <% row.each do |cell| %>
+          <td><%= cell %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  <% else %>
+    <p>No guess board available.</p>
+  <% end %>
+</table>
+

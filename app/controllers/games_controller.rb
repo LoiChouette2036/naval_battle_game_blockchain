@@ -7,7 +7,7 @@ class GamesController < ApplicationController
   end
 
   def show
-    
+    @game = Game.find(params[:id])
   end
 
   def new
@@ -18,6 +18,7 @@ class GamesController < ApplicationController
     # create a new game and initialize it
     @game = Game.new(game_params)
     @game.creator = current_user
+    @game.initialize_game(current_user, nil) # Ensure initialization
     
     if @game.save
       redirect_to @game, notice: "Game created! Waiting for an opponent to join"
