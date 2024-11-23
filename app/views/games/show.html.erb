@@ -1,9 +1,11 @@
 <h1>Game Details</h1>
-<p>Creator: <%= @game.creator.username %></p>
-<p>Opponent: <%= @game.opponent&.username || "Waiting for an opponent" %></p>
-<p>Status: <%= @game.status %></p>
-<p>Current Player: <%= @game.current_player&.username || "Waiting for players to join" %></p>
 
+<div class="presentation">
+  <p>Creator: <%= @game.creator.username %></p>
+  <p>Opponent: <%= @game.opponent&.username || "Waiting for an opponent" %></p>
+  <p>Status: <%= @game.status %></p>
+  <p>Current Player: <%= @game.current_player&.username || "Waiting for players to join" %></p>
+</div>
 
 <% if @game.opponent.nil? && @game.creator != current_user %>
   <!-- Show Join Game button -->
@@ -14,35 +16,41 @@
   <%= button_to "Attack", attack_game_path(@game), method: :post, params: { x: 1, y: 1 } %>
 <% end %>
 
-<h2>Your Board</h2>
-<table border="1">
-  <% current_board = current_user == @game.creator ? @game.player1_board : @game.player2_board %>
-  <% if current_board.present? %>
-    <% current_board.each do |row| %>
-      <tr>
-        <% row.each do |cell| %>
-          <td><%= cell %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  <% else %>
-    <p>No board available.</p>
-  <% end %>
-</table>
 
-<h2>Your Guess Board</h2>
-<table border="1">
-  <% guess_board = current_user == @game.creator ? @game.player1_guess_board : @game.player2_guess_board %>
-  <% if guess_board.present? %>
-    <% guess_board.each do |row| %>
-      <tr>
-        <% row.each do |cell| %>
-          <td><%= cell %></td>
+<div class="container-board">
+  <div class="your-board">
+    <h2>Your Board</h2>
+    <table border="1">
+      <% current_board = current_user == @game.creator ? @game.player1_board : @game.player2_board %>
+      <% if current_board.present? %>
+        <% current_board.each do |row| %>
+          <tr>
+            <% row.each do |cell| %>
+              <td><%= cell %></td>
+            <% end %>
+          </tr>
         <% end %>
-      </tr>
-    <% end %>
-  <% else %>
-    <p>No guess board available.</p>
-  <% end %>
-</table>
+      <% else %>
+        <p>No board available.</p>
+      <% end %>
+    </table>
+  </div>
 
+  <div class="your-guess-board">
+    <h2>Your Guess Board</h2>
+    <table border="1">
+      <% guess_board = current_user == @game.creator ? @game.player1_guess_board : @game.player2_guess_board %>
+      <% if guess_board.present? %>
+        <% guess_board.each do |row| %>
+          <tr>
+            <% row.each do |cell| %>
+              <td><%= cell %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% else %>
+        <p>No guess board available.</p>
+      <% end %>
+    </table>
+  </div>
+</div>

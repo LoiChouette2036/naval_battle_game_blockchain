@@ -5,14 +5,42 @@
     margin: 10px 0;
     border: 1px solid #c3e6cb;
     border-radius: 5px;
-  }
+}
   
-  .flash.alert {
+.flash.alert {
     background-color: #f8d7da;
     color: #721c24;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #f5c6cb;
     border-radius: 5px;
-  }
+}
   
+.presentation {
+  display: flex;
+  gap: 20px;
+}
+
+.container-board {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+table {
+  border-collapse: collapse; /* Removes extra space between table cells */
+}
+
+table td {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 16px;
+  border: 1px solid red;
+}
+
+.your-board,
+.your-guess-board {
+  margin: 10px;
+}
+
