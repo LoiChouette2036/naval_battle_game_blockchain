@@ -1,79 +1,95 @@
-.ship-selection {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .ship {
-    display: inline-block;
-    width: fit-content;
-    padding: 10px;
-    border: 2px solid #000;
-    background-color: #87CEEB; /* Light blue */
-    color: #000;
-    font-weight: bold;
-    text-align: center;
-    cursor: grab;
-  }
-  
-  .ship.carrier {
-    width: calc(40px * 5); /* Width corresponds to size of the boat */
-  }
-  
-  .ship.battleship {
-    width: calc(40px * 4);
-  }
-  
-  .ship.cruiser {
-    width: calc(40px * 3);
-  }
-  
-  .ship.submarine {
-    width: calc(40px * 3);
-  }
-  
-  .ship.destroyer {
-    width: calc(40px * 2);
-  }
-  
-  /* Hover effect for better feedback */
-  .ship:hover {
-    background-color: #4682B4; /* Darker blue */
-    color: #fff;
-  }
-  
-  /* Board Cell Styling */
-#player-board td,
-#guess-board td {
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  vertical-align: middle;
-  border: 1px solid #ccc;
-  position: relative;
+/* General Styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 0;
 }
 
-#player-board td.ship,
-#guess-board td.ship {
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.presentation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  border-collapse: collapse;
+  margin: 10px auto;
+}
+
+/* Board Styling */
+#player-board td {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  text-align: center;
+  background-color: white;
+  transition: background-color 0.3s;
+}
+
+#player-board td.ship {
   background-color: #4682B4; /* Highlight for placed ships */
 }
 
-/* Highlight cells during drag-and-drop */
-#player-board td.drag-hover {
-  background-color: rgba(0, 0, 255, 0.2); /* Light blue for drop target */
+#player-board td:hover {
+  background-color: rgba(70, 130, 180, 0.3); /* Light blue highlight on hover */
 }
 
-/* Ship Placement Feedback */
-#player-board td.invalid-placement {
-  background-color: rgba(255, 0, 0, 0.2); /* Light red for invalid placement */
+/* Ship Selection */
+.ship-selection {
+  display: flex;
+  justify-content: center; /* Centers the ships horizontally */
+  gap: 15px; /* Adds space between ships */
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Guess Board Styling */
-#guess-board td.hit {
-  background-color: #FF6347; /* Red for a hit */
+
+.ship {
+  display: inline-block;
+  text-align: center;
+  background-color: #87CEEB;
+  font-weight: bold;
+  color: black;
+  border: 2px solid black;
+  height: 40px;
+  line-height: 40px;
+  cursor: grab;
+  margin: 5px;
 }
 
-#guess-board td.miss {
-  background-color: #D3D3D3; /* Light gray for a miss */
+.ship:hover {
+  background-color: #4682B4;
+  color: #fff;
 }

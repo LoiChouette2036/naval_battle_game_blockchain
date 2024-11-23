@@ -79,7 +79,7 @@ class Game < ApplicationRecord
     # Save the updated board
     player == creator ? self.player1_board = board : self.player2_board = board
     save!
-  end
+   end
   
 
 

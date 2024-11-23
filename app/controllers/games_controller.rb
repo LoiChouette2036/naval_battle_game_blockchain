@@ -39,33 +39,20 @@ class GamesController < ApplicationController
   end
 
   def place_ship
-    if @game.phase != "placing_ships"
-      render json: { success: false, error: "You cannot place ships in this phase!" }, status: :unprocessable_entity
-      return
-    end
-    # Example params: {x: 0, y: 0, direction: "horizontal", size: 3}
+    @game = Game.find(params[:id])
+    x = params[:x].to_i
+    y = params[:y].to_i
+    size = params[:size].to_i
+    direction = params[:direction]
+  
     begin
-      #Place the ship on the board
-      @game.place_ship(current_user, params[:x].to_i, params[:y].to_i, params[:direction], params[:size].to_i)
-
-      # Check if all ships are placed for this player
-      if all_ships_placed?
-        # If all ships are placed for both player, move to "attacking" phase
-        if both_players_ready?
-          @game.start_attacking
-          message = "All ships placed! The game is now in the attacking phase."
-        else
-          message = "You have placed all your ships. Waiting for the other player to finish"
-        end
-      else
-        message = "Ship placed successfully!"
-      end
-
-      render json: { success: true, message: message }     
+      @game.place_ship(current_user, x, y, direction, size)
+      render json: { success: true, message: "Ship placed successfully!" }
     rescue => e
       render json: { success: false, error: e.message }, status: :unprocessable_entity
     end
   end
+  
 
   def attack
     if @game.phase != "attacking"

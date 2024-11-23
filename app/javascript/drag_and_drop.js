@@ -1,65 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const ships = document.querySelectorAll('.ship'); // Select ships
+  const ships = document.querySelectorAll('.ship'); // Select all ships
   const boardCells = document.querySelectorAll('#player-board td'); // Select board cells
-
   let draggedShip = null;
 
-  // Enable dragging for ships
+  // Handle drag start for ships
   ships.forEach(ship => {
-    ship.addEventListener('dragstart', (e) => {
+    ship.addEventListener('dragstart', (event) => {
       draggedShip = {
-        size: parseInt(ship.dataset.size),
-        direction: ship.dataset.direction,
+        id: ship.id,
+        size: parseInt(ship.dataset.size), // Get ship size
+        direction: ship.dataset.direction, // Get ship direction
+        element: ship // Reference to the DOM element
       };
-      console.log(`Dragging ship of size: ${draggedShip.size}, direction: ${draggedShip.direction}`);
-    });
-
-    ship.addEventListener('dragend', () => {
-      console.log("Ship drag ended");
+      event.dataTransfer.setData('text/plain', JSON.stringify(draggedShip));
+      event.dataTransfer.effectAllowed = 'move';
+      console.log(`Dragging ship: ${draggedShip.id}, size=${draggedShip.size}`);
     });
   });
 
-  // Function to validate placement before sending to backend
-  function isPlacementValid(x, y, size, direction) {
-    if (direction === "horizontal" && y + size > 10) {
-      alert("Placement out of bounds horizontally.");
-      return false;
-    }
-    if (direction === "vertical" && x + size > 10) {
-      alert("Placement out of bounds vertically.");
-      return false;
-    }
-    return true;
-  }
-
-  // Allow dropping on the board
+  // Allow cells to accept drops
   boardCells.forEach(cell => {
-    cell.addEventListener('dragover', (e) => {
-      e.preventDefault(); // Necessary to allow dropping
+    cell.addEventListener('dragover', (event) => {
+      event.preventDefault(); // Necessary to allow dropping
+      cell.classList.add('drag-over'); // Highlight cell during drag
     });
 
-    cell.addEventListener('drop', (e) => {
-      e.preventDefault();
+    cell.addEventListener('dragleave', () => {
+      cell.classList.remove('drag-over'); // Remove highlight when leaving
+    });
+
+    // Handle drop event
+    cell.addEventListener('drop', (event) => {
+      event.preventDefault();
+      cell.classList.remove('drag-over'); // Remove highlight
 
       if (!draggedShip) {
-        console.error("No ship data available during drop");
+        console.error('No ship is being dragged!');
         return;
       }
 
-      const x = parseInt(e.target.dataset.x); // Get cell coordinates
-      const y = parseInt(e.target.dataset.y);
+      const x = parseInt(cell.dataset.x); // Get X coordinate
+      const y = parseInt(cell.dataset.y); // Get Y coordinate
+      console.log(`Dropping ship at: (${x}, ${y})`);
 
-      console.log(`Dropping ship at cell (${x}, ${y})`);
-
-      // Validate placement
-      if (!isPlacementValid(x, y, draggedShip.size, draggedShip.direction)) {
-        console.error("Invalid ship placement.");
-        return; // Stop if placement is invalid
-      }
-
+      // Backend game ID
       const gameId = document.querySelector('#player-board').dataset.gameId;
 
-      // Send placement to the backend
+      // Send data to the backend
       fetch(`/games/${gameId}/place_ship`, {
         method: 'POST',
         headers: {
@@ -69,35 +56,34 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({
           x: x,
           y: y,
-          direction: draggedShip.direction,
           size: draggedShip.size,
+          direction: draggedShip.direction
         }),
       })
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            alert('Ship placed successfully!');
+            console.log('Ship placed successfully:', data);
 
-            // Update board visually
+            // Visual feedback: mark the cells where the ship is placed
             for (let i = 0; i < draggedShip.size; i++) {
-              const targetCellId = draggedShip.direction === "horizontal"
+              const targetCellId = draggedShip.direction === 'horizontal'
                 ? `cell-${x}-${y + i}` // Horizontal placement
                 : `cell-${x + i}-${y}`; // Vertical placement
 
               const targetCell = document.getElementById(targetCellId);
-
               if (targetCell) {
-                targetCell.classList.add('ship'); // Apply the 'ship' class
-                console.log(`Applied 'ship' class to cell ID: ${targetCellId}`);
+                targetCell.classList.add('ship'); // Mark as occupied
               } else {
-                console.error(`Cell with ID ${targetCellId} not found.`);
+                console.error(`Target cell not found: ${targetCellId}`);
               }
             }
 
-            // Reset draggedShip after successful placement
-            draggedShip = null;
+            // Remove the ship element from the UI
+            draggedShip.element.remove();
+            draggedShip = null; // Reset the dragged ship
           } else {
-            alert(data.error || 'Failed to place the ship.');
+            alert(`Error placing ship: ${data.error}`);
           }
         })
         .catch(error => {
