@@ -1,0 +1,45 @@
+.ship-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .ship {
+    display: inline-block;
+    width: fit-content;
+    padding: 10px;
+    border: 2px solid #000;
+    background-color: #87CEEB; /* Light blue */
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    cursor: grab;
+  }
+  
+  .ship.carrier {
+    width: calc(40px * 5); /* Width corresponds to size of the boat */
+  }
+  
+  .ship.battleship {
+    width: calc(40px * 4);
+  }
+  
+  .ship.cruiser {
+    width: calc(40px * 3);
+  }
+  
+  .ship.submarine {
+    width: calc(40px * 3);
+  }
+  
+  .ship.destroyer {
+    width: calc(40px * 2);
+  }
+  
+  /* Hover effect for better feedback */
+  .ship:hover {
+    background-color: #4682B4; /* Darker blue */
+    color: #fff;
+  }
+  
