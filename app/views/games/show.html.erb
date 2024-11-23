@@ -7,65 +7,23 @@
   <p>Current Player: <%= @game.current_player&.username || "Waiting for players to join" %></p>
 </div>
 
-<% if @game.opponent.nil? && @game.creator != current_user %>
-  <!-- Show Join Game button -->
-  <%= button_to "Join Game", join_game_path(@game), method: :post %>
-<% elsif @game.status == "in_progress" %>
-  <!-- Show gameplay buttons -->
-  <%= button_to "Place Ship", place_ship_game_path(@game), method: :post, params: { x: 0, y: 0, direction: "horizontal", size: 3 } %>
-  <%= button_to "Attack", attack_game_path(@game), method: :post, params: { x: 1, y: 1 } %>
-<% end %>
-
-
 <div class="container-board">
-  <div class="your-board">
   <h2>Your Board</h2>
-  <table id="player-board" border="1" data-game-id="<%= @game.id %>">
+  <table id="player-board" data-game-id="<%= @game.id %>" aria-label="Player Board">
     <% 10.times do |x| %>
       <tr>
         <% 10.times do |y| %>
-          <td id="cell-<%= x %>-<%= y %>" data-x="<%= x %>" data-y="<%= y %>"></td>
+          <td id="cell-<%= x %>-<%= y %>" data-x="<%= x %>" data-y="<%= y %>" aria-label="Cell <%= x %>, <%= y %>"></td>
         <% end %>
       </tr>
     <% end %>
   </table>
 </div>
 
-
-  <div class="your-guess-board">
-    <h2>Your Guess Board</h2>
-    <table border="1">
-      <% guess_board = current_user == @game.creator ? @game.player1_guess_board : @game.player2_guess_board %>
-      <% if guess_board.present? %>
-        <% guess_board.each do |row| %>
-          <tr>
-            <% row.each do |cell| %>
-              <td><%= cell %></td>
-            <% end %>
-          </tr>
-        <% end %>
-      <% else %>
-        <p>No guess board available.</p>
-      <% end %>
-    </table>
-  </div>
-</div>
-
-<div id="ship-selection" class="ship-selection">
-  <h3>Available Ships</h3>
-  <div class="ship carrier" draggable="true" data-size="5" data-direction="horizontal">
-    Carrier (5)
-  </div>
-  <div class="ship battleship" draggable="true" data-size="4" data-direction="horizontal">
-    Battleship (4)
-  </div>
-  <div class="ship cruiser" draggable="true" data-size="3" data-direction="horizontal">
-    Cruiser (3)
-  </div>
-  <div class="ship submarine" draggable="true" data-size="3" data-direction="horizontal">
-    Submarine (3)
-  </div>
-  <div class="ship destroyer" draggable="true" data-size="2" data-direction="horizontal">
-    Destroyer (2)
-  </div>
+<div id="ship-selection" class="ship-selection" style="margin-top: 20px;">
+  <div class="ship" draggable="true" data-size="5" data-direction="horizontal" style="width: 200px;">Carrier (5)</div>
+  <div class="ship" draggable="true" data-size="4" data-direction="horizontal" style="width: 160px;">Battleship (4)</div>
+  <div class="ship" draggable="true" data-size="3" data-direction="horizontal" style="width: 120px;">Cruiser (3)</div>
+  <div class="ship" draggable="true" data-size="3" data-direction="horizontal" style="width: 120px;">Submarine (3)</div>
+  <div class="ship" draggable="true" data-size="2" data-direction="horizontal" style="width: 80px;">Destroyer (2)</div>
 </div>
