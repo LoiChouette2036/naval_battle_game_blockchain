@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_17_090028) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_23_085817) do
   create_table "games", force: :cascade do |t|
     t.string "status"
     t.decimal "bet_amount"
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_17_090028) do
     t.json "player1_guess_board"
     t.json "player2_guess_board"
     t.integer "current_player_id"
+    t.string "phase", default: "placing_ships"
   end
 
   create_table "users", force: :cascade do |t|
