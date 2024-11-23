@@ -3,7 +3,7 @@ class Game < ApplicationRecord
   belongs_to :creator, class_name: "User", optional: true
   belongs_to :opponent, class_name: "User", optional: true
   belongs_to :winner, class_name: "User", optional: true
-
+ 
   # Validations
   validates :bet_amount, numericality: { greater_than_or_equal_to: 0 }
 
@@ -21,6 +21,7 @@ class Game < ApplicationRecord
     self.player1_guess_board = Array.new(10) { Array.new(10, '-') }
     self.player2_guess_board = Array.new(10) { Array.new(10, '-') }
 
+
     # Set game status and players
     self.status = "in_progress"
     self.creator = creator
@@ -32,17 +33,8 @@ class Game < ApplicationRecord
     self.save!
     puts "Game saved successfully: #{self.inspect}"
   end
-
-  def join_game(opponent)
-    raise "Game already has two players" if self.opponent.present?
-  
-    self.opponent = opponent
-    self.status = "in_progress" # Change status to in progress when the second player joins
-    self.current_player_id ||= creator.id # Set the starting player to the creator
-    self.save!
-  end
-
-  # Place a ship on the player's board
+   
+   # Place a ship on the player's board
   def place_ship(player, x, y, direction, size)
     board = player == creator ? player1_board : player2_board
 
@@ -57,6 +49,16 @@ class Game < ApplicationRecord
 
     player == creator ? self.player1_board = board : self.player2_board = board
     save
+  end
+
+
+  def join_game(opponent)
+    raise "Game already has two players" if self.opponent.present?
+  
+    self.opponent = opponent
+    self.status = "in_progress" # Change status to in progress when the second player joins
+    self.current_player_id ||= creator.id # Set the starting player to the creator
+    self.save!
   end
 
   # Attack logic
@@ -120,7 +122,7 @@ class Game < ApplicationRecord
 
   private
 
-  # Validate the ship placement
+  #Validate the ship placement
   def valid_ship_placement?(x, y, direction, size, board)
     return false if direction == "horizontal" && (y + size > 10)
     return false if direction == "vertical" && (x + size > 10)
