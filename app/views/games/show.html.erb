@@ -19,22 +19,18 @@
 
 <div class="container-board">
   <div class="your-board">
-    <h2>Your Board</h2>
-    <table border="1">
-      <% current_board = current_user == @game.creator ? @game.player1_board : @game.player2_board %>
-      <% if current_board.present? %>
-        <% current_board.each do |row| %>
-          <tr>
-            <% row.each do |cell| %>
-              <td><%= cell %></td>
-            <% end %>
-          </tr>
+  <h2>Your Board</h2>
+  <table id="player-board" border="1" data-game-id="<%= @game.id %>">
+    <% 10.times do |x| %>
+      <tr>
+        <% 10.times do |y| %>
+          <td id="cell-<%= x %>-<%= y %>" data-x="<%= x %>" data-y="<%= y %>"></td>
         <% end %>
-      <% else %>
-        <p>No board available.</p>
-      <% end %>
-    </table>
-  </div>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
 
   <div class="your-guess-board">
     <h2>Your Guess Board</h2>

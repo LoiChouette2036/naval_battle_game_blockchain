@@ -43,3 +43,37 @@
     color: #fff;
   }
   
+  /* Board Cell Styling */
+#player-board td,
+#guess-board td {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+#player-board td.ship,
+#guess-board td.ship {
+  background-color: #4682B4; /* Highlight for placed ships */
+}
+
+/* Highlight cells during drag-and-drop */
+#player-board td.drag-hover {
+  background-color: rgba(0, 0, 255, 0.2); /* Light blue for drop target */
+}
+
+/* Ship Placement Feedback */
+#player-board td.invalid-placement {
+  background-color: rgba(255, 0, 0, 0.2); /* Light red for invalid placement */
+}
+
+/* Guess Board Styling */
+#guess-board td.hit {
+  background-color: #FF6347; /* Red for a hit */
+}
+
+#guess-board td.miss {
+  background-color: #D3D3D3; /* Light gray for a miss */
+}

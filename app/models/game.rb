@@ -7,6 +7,19 @@ class Game < ApplicationRecord
   # Validations
   validates :bet_amount, numericality: { greater_than_or_equal_to: 0 }
 
+  PHASES = %w[placing_ships attacking completed].freeze
+
+  validates :phase, inclusion: { in: PHASES }
+
+  # Transition to attacking phase
+  def start_attacking
+    update!(phase: "attacking") if phase == "placing_ships"
+  end
+
+  def complete_game
+    update!(phase: "completed") if phase == "attacking"
+  end
+
   # Initialize the game with boards and set the starting player
   def initialize_game(creator, opponent, bet_amount = 0)
     puts "Initializing game with bet amount: #{bet_amount.inspect}" # Debug output
@@ -35,21 +48,39 @@ class Game < ApplicationRecord
   end
    
    # Place a ship on the player's board
-  def place_ship(player, x, y, direction, size)
+   def place_ship(player, x, y, direction, size)
+    # Debugging information
+    puts "Placing ship: player=#{player.id}, x=#{x}, y=#{y}, direction=#{direction}, size=#{size}"
+    
+    # Validate phase
+    raise "Cannot place ships, phase is #{phase}" unless phase == "placing_ships"
+    
+    # Select the appropriate board based on the player
     board = player == creator ? player1_board : player2_board
-
-    raise "Invalid ship placement" unless valid_ship_placement?(x, y, direction, size, board)
-
+  
+    # Validate ship placement is within bounds
+    raise "Ship placement is out of bounds" if direction == "horizontal" && (y + size > 10)
+    raise "Ship placement is out of bounds" if direction == "vertical" && (x + size > 10)
+  
+    # Validate that no other ships occupy the space
+    size.times do |i|
+      cell = direction == "horizontal" ? board[x][y + i] : board[x + i][y]
+      raise "Ship placement overlaps another ship" if cell != '-'
+    end
+  
+    # Place the ship on the board
     case direction
     when "horizontal"
       size.times { |i| board[x][y + i] = 'S' }
     when "vertical"
       size.times { |i| board[x + i][y] = 'S' }
     end
-
+  
+    # Save the updated board
     player == creator ? self.player1_board = board : self.player2_board = board
-    save
+    save!
   end
+  
 
 
   def join_game(opponent)
@@ -65,6 +96,9 @@ class Game < ApplicationRecord
   def attack(player, x, y)
     opponent_board = player == creator ? player2_board : player1_board
     guess_board = player == creator ? player1_guess_board : player2_guess_board
+
+    # Validates the cell hasn't been attacked yet
+    raise "Cell already attacked!" if %w[H M].include?(opponent_board[x][y])
 
     case opponent_board[x][y]
     when 'S'
@@ -124,14 +158,21 @@ class Game < ApplicationRecord
 
   #Validate the ship placement
   def valid_ship_placement?(x, y, direction, size, board)
-    return false if direction == "horizontal" && (y + size > 10)
-    return false if direction == "vertical" && (x + size > 10)
-
+    # Out-of-Bounds Check
+    if direction == "horizontal" && (y + size > 10)
+      raise "Ship placement is out of bounds horizontally"
+    elsif direction == "vertical" && (x + size > 10)
+      raise "Ship placement is out of bounds vertically"
+    end
+  
+    # Overlapping Check
     size.times do |i|
       cell = direction == "horizontal" ? board[x][y + i] : board[x + i][y]
-      return false if cell != '-'
+      raise "Ship placement overlaps another ship" if cell != '-'
     end
-
+  
     true
   end
+  
+  
 end
