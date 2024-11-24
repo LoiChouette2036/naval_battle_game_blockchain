@@ -8,6 +8,13 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+    @ships = [
+      { name: "Carrier", size: 5, coordinates: [] },
+      { name: "Battleship", size: 4, coordinates: [] },
+      { name: "Cruiser", size: 3, coordinates: [] },
+      { name: "Submarine", size: 3, coordinates: [] },
+      { name: "Destroyer", size: 2, coordinates: [] }
+    ]
   end
 
   def new

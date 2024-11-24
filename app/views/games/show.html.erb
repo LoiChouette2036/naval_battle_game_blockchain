@@ -9,21 +9,17 @@
 
 <div class="container-board">
   <h2>Your Board</h2>
-  <table id="player-board" data-game-id="<%= @game.id %>" aria-label="Player Board">
-    <% 10.times do |x| %>
-      <tr>
-        <% 10.times do |y| %>
-          <td id="cell-<%= x %>-<%= y %>" data-x="<%= x %>" data-y="<%= y %>" aria-label="Cell <%= x %>, <%= y %>"></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </table>
+  <div id="player-board" data-game-id="<%= @game.id %>"></div>
 </div>
 
 <div id="ship-selection" class="ship-selection" style="margin-top: 20px;">
-  <div class="ship" draggable="true" data-size="5" data-direction="horizontal" style="width: 200px;">Carrier (5)</div>
-  <div class="ship" draggable="true" data-size="4" data-direction="horizontal" style="width: 160px;">Battleship (4)</div>
-  <div class="ship" draggable="true" data-size="3" data-direction="horizontal" style="width: 120px;">Cruiser (3)</div>
-  <div class="ship" draggable="true" data-size="3" data-direction="horizontal" style="width: 120px;">Submarine (3)</div>
-  <div class="ship" draggable="true" data-size="2" data-direction="horizontal" style="width: 80px;">Destroyer (2)</div>
+  <% @ships.each do |ship| %>
+    <div class="ship" 
+         draggable="true" 
+         data-name="<%= ship[:name] %>"
+         data-size="<%= ship[:size] %>" 
+         style="width: <%= ship[:size] * 40 %>px;">
+      <%= ship[:name] %> (<%= ship[:size] %>)
+    </div>
+  <% end %>
 </div>

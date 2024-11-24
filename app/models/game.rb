@@ -47,8 +47,8 @@ class Game < ApplicationRecord
     puts "Game saved successfully: #{self.inspect}"
   end
    
-   # Place a ship on the player's board
-   def place_ship(player, x, y, direction, size)
+  # Place a ship on the player's board
+  def place_ship(player, x, y, direction, size)
     # Debugging information
     puts "Placing ship: player=#{player.id}, x=#{x}, y=#{y}, direction=#{direction}, size=#{size}"
     
@@ -57,17 +57,17 @@ class Game < ApplicationRecord
     
     # Select the appropriate board based on the player
     board = player == creator ? player1_board : player2_board
-  
+
     # Validate ship placement is within bounds
     raise "Ship placement is out of bounds" if direction == "horizontal" && (y + size > 10)
     raise "Ship placement is out of bounds" if direction == "vertical" && (x + size > 10)
-  
+
     # Validate that no other ships occupy the space
     size.times do |i|
       cell = direction == "horizontal" ? board[x][y + i] : board[x + i][y]
       raise "Ship placement overlaps another ship" if cell != '-'
     end
-  
+
     # Place the ship on the board
     case direction
     when "horizontal"
@@ -75,12 +75,12 @@ class Game < ApplicationRecord
     when "vertical"
       size.times { |i| board[x + i][y] = 'S' }
     end
-  
+
     # Save the updated board
     player == creator ? self.player1_board = board : self.player2_board = board
     save!
-   end
-  
+  end
+
 
 
   def join_game(opponent)

@@ -9,87 +9,37 @@ body {
   margin: 0;
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.presentation {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 800px;
-  padding: 10px;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .container-board {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  margin-top: 20px;
-  padding: 10px;
+  gap: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
   border: 2px solid #ccc;
   border-radius: 8px;
-  background-color: #fff;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-table {
-  border-collapse: collapse;
-  margin: 10px auto;
+.row {
+  display: flex;
 }
 
-/* Board Styling */
-#player-board td {
+.cell {
   width: 40px;
   height: 40px;
   border: 1px solid #ccc;
-  text-align: center;
   background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: background-color 0.3s;
 }
 
-#player-board td.ship {
-  background-color: #4682B4; /* Highlight for placed ships */
+.cell.ship {
+  background-color: #4682B4; /* Ship color */
 }
 
-#player-board td:hover {
-  background-color: rgba(70, 130, 180, 0.3); /* Light blue highlight on hover */
-}
-
-/* Ship Selection */
-.ship-selection {
-  display: flex;
-  justify-content: center; /* Centers the ships horizontally */
-  gap: 15px; /* Adds space between ships */
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-
-.ship {
-  display: inline-block;
-  text-align: center;
-  background-color: #87CEEB;
-  font-weight: bold;
-  color: black;
-  border: 2px solid black;
-  height: 40px;
-  line-height: 40px;
-  cursor: grab;
-  margin: 5px;
-}
-
-.ship:hover {
-  background-color: #4682B4;
-  color: #fff;
+.cell:hover {
+  background-color: rgba(70, 130, 180, 0.3);
 }
