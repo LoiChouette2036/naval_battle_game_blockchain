@@ -33,16 +33,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Board successfully generated.');
 
-    // Step 3: Initialize drag-and-drop for ships
     const ships = document.querySelectorAll('.ship'); // Select all ships
     let draggedShip = null; // Track the currently dragged ship
+
+    // event listener click to select a boat
+
+    ships.forEach(ship => {
+        ship.addEventListener('click', () => {
+            // remove the 'selected' class from all ships
+            ships.forEach(s=> s.classList.remove('selected'));
+
+            // add the 'selected' class to the clicked ship
+            ship.classList.add('selected');
+            console.log(`${ship.dataset.name} is selected.`);
+        });
+    });
+
+    // add keydown listener for spacebar to rotate the selected ship
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Space') {
+            const selectedShip = document.querySelector('.ship.selected');
+            if (!selectedShip) {
+                console.log('No ship is selected to rotate.');
+                return;
+            }
+
+            // Toggle the direction (horizontal <=> vertical)
+            const currentDirection = selectedShip.dataset.direction;
+            const newDirection = currentDirection === 'horizontal' ? 'vertical' : 'horizontal';
+            selectedShip.dataset.direction = newDirection;
+
+            // Apply the rotation styles dynamically
+            if (newDirection === 'vertical') {
+                selectedShip.style.width = '40px'; // Match a single cell width
+                selectedShip.style.height = `${parseInt(selectedShip.dataset.size) * 40}px`; // Adjust height
+            } else {
+                selectedShip.style.width = `${parseInt(selectedShip.dataset.size) * 40}px`; // Adjust width
+                selectedShip.style.height = '40px'; // Match a single cell height
+            }
+
+            console.log(`Rotated ${selectedShip.dataset.name} to ${newDirection}.`);
+        }
+    });
+
+    // Step 3: Initialize drag-and-drop for ships
 
     ships.forEach(ship => {
         ship.addEventListener('dragstart', (event) => {
             draggedShip = {
                 name: ship.dataset.name,
                 size: parseInt(ship.dataset.size),
-                direction: 'horizontal', // Default direction
+                direction: ship.dataset.direction,
             };
             console.log(`Dragging: ${draggedShip.name}, size: ${draggedShip.size}, direction: ${draggedShip.direction}`);
             event.dataTransfer.setData('text/plain', JSON.stringify(draggedShip));
@@ -98,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 0; i < size; i++) {
             const targetCellId = direction === 'horizontal'
-                ? `cell-${x}-${y + i}`
-                : `cell-${x + i}-${y}`;
+                ? `cell-${x}-${y + i}` // horizontal placement
+                : `cell-${x + i}-${y}`; // vertical placement
 
             const targetCell = document.getElementById(targetCellId);
             if (targetCell) {
@@ -144,8 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Mark the cells as occupied
-        occupiedCells.forEach(cell => {
+        occupiedCells.forEach((cell,index) => {
             cell.classList.add('ship');
+            console.log(`Marking cell ${cell.id} as occupied (part ${index + 1}/${size} of ${ship.name})`);
         });
 
         console.log(`Ship ${ship.name} placed successfully.`);

@@ -38,8 +38,64 @@ body {
 
 .cell.ship {
   background-color: #4682B4; /* Ship color */
+  border: 1px solid #333;
 }
 
 .cell:hover {
   background-color: rgba(70, 130, 180, 0.3);
+}
+
+.ship {
+  display: inline-block;
+  height: 40px; /* Matches one cell height */
+  line-height: 40px; /* Centers text vertically */
+  border: 2px solid black; /* Add border for visibility */
+  font-weight: bold;
+  text-align: center; /* Centers text horizontally */
+  cursor: grab; /* Indicate draggable items */
+  color: white; /* White text color */
+  user-select: none; /* Prevent text selection */
+}
+
+/* Ship Selection Styling */
+.ship-selection {
+  display: flex;
+  gap: 15px; /* Space between ships */
+  justify-content: center; /* Center ships horizontally */
+}
+
+/* Individual Ship Colors */
+.ship[data-name="Carrier"] {
+  width: 200px; /* 5 cells * 40px */
+  background-color: red;
+}
+
+.ship[data-name="Battleship"] {
+  width: 160px; /* 4 cells * 40px */
+  background-color: blue;
+}
+
+.ship[data-name="Cruiser"] {
+  width: 120px; /* 3 cells * 40px */
+  background-color: green;
+}
+
+.ship[data-name="Submarine"] {
+  width: 120px; /* 3 cells * 40px */
+  background-color: yellow;
+}
+
+.ship[data-name="Destroyer"] {
+  width: 80px; /* 2 cells * 40px */
+  background-color: gray;
+}
+
+/* Dragging Effect */
+.ship.dragging {
+  opacity: 0.7; /* Reduce opacity when dragging */
+}
+
+.ship.selected {
+  outline: 3px solid gold; /* Highlight selected ship */
+  box-shadow: 0 0 10px gold;
 }

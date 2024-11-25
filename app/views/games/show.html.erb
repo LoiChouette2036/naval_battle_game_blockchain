@@ -14,12 +14,13 @@
 
 <div id="ship-selection" class="ship-selection" style="margin-top: 20px;">
   <% @ships.each do |ship| %>
-    <div class="ship" 
+    <div class="ship <%= ship[:name].downcase %>" 
          draggable="true" 
          data-name="<%= ship[:name] %>"
-         data-size="<%= ship[:size] %>" 
+         data-size="<%= ship[:size] %>"
+         data-direction="horizontal" 
          style="width: <%= ship[:size] * 40 %>px;">
-      <%= ship[:name] %> (<%= ship[:size] %>)
+      <%= ship[:name] %>
     </div>
   <% end %>
 </div>
